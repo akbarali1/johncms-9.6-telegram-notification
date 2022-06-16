@@ -72,8 +72,8 @@ if ($admin_theme !== false) {
 echo $view->render(
     'admin::settings',
     [
-        'sysconf'      => $config,
+        'sysconf' => $config,
         'confirmation' => $confirmation ?? false,
-        'themelist'    => $themes,
+        'themelist' => $themes,
     ]
 );

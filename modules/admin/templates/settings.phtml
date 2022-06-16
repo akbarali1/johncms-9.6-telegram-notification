@@ -7,6 +7,8 @@
  */
 $this->layout('system::layout/default', ['title' => __('Admin Panel'), 'page_title' => __('System Settings')]);
 $this->sectionReplace('sidebar-menu', $this->fetch('admin::sidebar-admin-menu', ['sys_menu' => ['settings' => true]]));
+//echo '<pre>' . var_export($sysconf, true) . '</pre>';
+//die();
 ?>
 
 <div style="max-width: 640px">
@@ -32,7 +34,7 @@ $this->sectionReplace('sidebar-menu', $this->fetch('admin::sidebar-admin-menu', 
                 <input type="text" id="madm" name="madm" maxlength="50" class="form-control" value="<?= $this->e($sysconf['email']) ?>"/>
             </div>
             <div class="form-group">
-                <label for="madm">Telegram Token</label>
+                <label for="madm">Bot Token</label>
                 <input type="text" id="bot_token" name="bot_token" maxlength="50" class="form-control" value="<?= $this->e($sysconf['bot_token']) ?? '' ?>"/>
             </div>
             <div class="form-group">

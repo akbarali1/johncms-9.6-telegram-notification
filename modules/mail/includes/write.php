@@ -10,6 +10,9 @@
 
 declare(strict_types=1);
 
+use Guestbook\Services\Telegram\TelegramService;
+use Johncms\Users\User;
+
 defined('_IN_JOHNCMS') || die('Error: restricted access');
 
 $set_mail = unserialize((string) $user->set_mail, ['allowed_classes' => false]);
@@ -430,6 +433,11 @@ if (isset($_POST['submit']) && empty($user->ban['1']) && empty($user->ban['3']) 
         if ($ch === 0) {
             $db->exec("UPDATE `cms_contact` SET `time` = '" . time() . "' WHERE `user_id` = '" . $user->id . "' AND `from_id` = '" . $id . "'");
             $db->exec("UPDATE `cms_contact` SET `time` = '" . time() . "' WHERE `user_id` = '" . $id . "' AND `from_id` = '" . $user->id . "'");
+        }
+
+        $send_user_model = (new User())->select('telegram_id')->find($id);
+        if (isset($send_user_model->telegram_id) && ! empty($send_user_model->telegram_id)) {
+            (new TelegramService())->replyMessageNotification($text, $send_user_model->telegram_id, $user->name, time(), $user->id);
         }
 
         header('Location: ?act=write' . ($id ? '&id=' . $id : ''));

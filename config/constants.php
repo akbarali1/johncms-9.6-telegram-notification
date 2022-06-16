@@ -16,7 +16,7 @@ const CMS_VERSION = '9.6';
 const USE_CRON = false;
 
 // Включаем режим отладки
-const DEBUG = false;
+const DEBUG = true;
 
 // Константа для проверки подключенного ядра
 const _IN_JOHNCMS = true;

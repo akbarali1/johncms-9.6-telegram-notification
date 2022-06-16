@@ -146,6 +146,7 @@ class User extends Model
         'about',
         'live',
         'mibile',
+        'telegram_id',
         'status',
         'ip',
         'ip_via_proxy',

@@ -16,6 +16,7 @@ use Exception;
 use Guestbook\Models\Guestbook;
 use Guestbook\Services\GuestbookForm;
 use Guestbook\Services\GuestbookService;
+use Guestbook\Services\Telegram\TelegramService;
 use GuzzleHttp\Psr7\UploadedFile;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Johncms\Controller\BaseController;
@@ -64,6 +65,7 @@ class GuestbookController extends BaseController
 
     public function index(GuestbookService $guestbook, GuestbookForm $form, Request $request, Session $session): string
     {
+        $telegram = di(TelegramService::class);
         $this->render->addData(['title' => $this->page_title, 'page_title' => $this->page_title]);
 
         $flash_errors = $session->getFlash('errors');
@@ -162,7 +164,7 @@ class GuestbookController extends BaseController
                 foreach ($post->attached_files as $attached_file) {
                     try {
                         $storage->delete($attached_file);
-                    } catch (Exception | FilesystemException $exception) {
+                    } catch (Exception|FilesystemException $exception) {
                     }
                 }
             }
@@ -280,6 +282,10 @@ class GuestbookController extends BaseController
 
             $validator = new Validator($form_data, $rules);
             if ($validator->isValid()) {
+//                echo '<pre>';
+//                print_r($message->toArray());
+//                echo '</pre>';
+//                die();
                 $message->update(
                     [
                         'otvet'          => $form_data['message'],
@@ -288,6 +294,12 @@ class GuestbookController extends BaseController
                         'attached_files' => array_merge((array) $message->attached_files, $form_data['attached_files']),
                     ]
                 );
+
+                $send_user_model = (new User())->select('telegram_id')->find($message->user_id);
+                if (isset($send_user_model->telegram_id) && ! empty($send_user_model->telegram_id)) {
+                    (new TelegramService())->replyGuestbookNotification($form_data['message'], $send_user_model->telegram_id, $user->name);
+                }
+
                 $session->flash('message', __('Your reply to the message was saved'));
                 redirect($this->base_url);
             }
@@ -331,7 +343,7 @@ class GuestbookController extends BaseController
             ];
             header('Content-Type: application/json');
             return json_encode($file_array);
-        } catch (FilesystemException | Exception $e) {
+        } catch (FilesystemException|Exception $e) {
             http_response_code(500);
             header('Content-Type: application/json');
             return json_encode(['errors' => $e->getMessage()]);

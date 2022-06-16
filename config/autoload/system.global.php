@@ -46,5 +46,6 @@ return [
         'meta_title'              => 'JohnCMS',
         'user_email_required'     => 1,
         'user_email_confirmation' => 1,
+        'bot_token'               => '',
     ],
 ];
