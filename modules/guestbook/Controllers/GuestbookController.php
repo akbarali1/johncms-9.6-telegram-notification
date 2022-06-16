@@ -65,7 +65,6 @@ class GuestbookController extends BaseController
 
     public function index(GuestbookService $guestbook, GuestbookForm $form, Request $request, Session $session): string
     {
-        $telegram = di(TelegramService::class);
         $this->render->addData(['title' => $this->page_title, 'page_title' => $this->page_title]);
 
         $flash_errors = $session->getFlash('errors');
