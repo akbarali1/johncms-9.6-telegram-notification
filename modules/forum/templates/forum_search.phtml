@@ -1,0 +1,91 @@
+<?php
+
+/**
+ * This file is part of JohnCMS Content Management System.
+ *
+ * @copyright JohnCMS Community
+ * @license   https://opensource.org/licenses/GPL-3.0 GPL-3.0
+ * @link      https://johncms.com JohnCMS Project
+ */
+
+/**
+ * @var $title
+ * @var $page_title
+ * @var $sections
+ * @var $online
+ * @var $files_count
+ * @var $unread_count
+ */
+
+$this->layout(
+    'system::layout/default',
+    [
+        'title'      => $title,
+        'page_title' => $page_title,
+    ]
+);
+?>
+
+<form action="/forum/?act=search" method="post">
+    <div class="form-group">
+        <label for="search_query"><?= __('Search query') ?></label>
+        <input type="text" class="form-control" id="search_query" placeholder="<?= __('Search query') ?>"
+               name="search" value="<?= $query ?>" maxlength="150" minlength="4" required>
+        <div class="small text-muted"><?= __('Length of query: 4min., 64maks.<br>Search is case insensitive <br>Results are sorted by relevance.') ?></div>
+    </div>
+    <div class="form-group">
+        <div class="custom-control custom-checkbox mb-3">
+            <input type="checkbox" class="custom-control-input" name="t" value="1" id="search_t" <?= ($search_t ? 'checked="checked"' : '') ?>>
+            <label class="custom-control-label" for="search_t"><?= __('Search in the topic names') ?></label>
+        </div>
+    </div>
+    <button type="submit" name="submit" value="1" class="btn btn-primary"><?= __('Search') ?></button>
+</form>
+
+<?php if (! empty($query) && empty($total)): ?>
+    <div class="alert alert-info mt-3">
+        <?= __('Your search did not match any results') ?>
+    </div>
+<?php endif; ?>
+
+<?php foreach ($results as $result): ?>
+    <div class="forum-section">
+        <div class="section-header">
+            <div class="d-flex align-items-center w-100">
+                <a href="<?= $result['topic_url'] ?>" class="section-name flex-grow-1 flex-md-grow-0"><?= $result['name'] ?></a>
+            </div>
+        </div>
+        <div class="small pt-2 text-muted">
+            <?= __('Author') ?>: <a href="/profile/?user=<?= $result['user_id'] ?>" class="mr-2"><?= $result['user_name'] ?></a>
+            <span class="mr-2"><?= $result['formatted_date'] ?></span>
+            <?php if (! empty($result['post_url'])): ?>
+                <a href="<?= $result['post_url'] ?>"><?= __('Go to Message') ?></a>
+            <?php endif; ?>
+        </div>
+        <?php if (! $search_t): ?>
+            <div class="post-body">
+                <?= $result['formatted_text'] ?>
+            </div>
+        <?php endif; ?>
+    </div>
+<?php endforeach; ?>
+<?php if ($total > 0): ?>
+    <div>
+        <div class="my-2"><?= __('Total') ?>: <?= $total ?></div>
+        <!-- Page switching -->
+        <?php if ($total > $user->config->kmess): ?>
+            <div><?= $pagination ?></div>
+        <?php endif ?>
+    </div>
+<?php endif; ?>
+<?php if (! empty($search_history)): ?>
+    <div class="mb-2 alert alert-secondary">
+        <div class="h5"><?= __('Search History') ?></div>
+        <div><?= implode(' / ', $search_history) ?></div>
+        <div class="mt-1">
+            <a href="<?= $history_reset_url ?>"><?= __('Clear history') ?></a>
+        </div>
+    </div>
+<?php endif; ?>
+<a href="/forum/" class="mb-2"><?= __('Forum') ?></a>
+

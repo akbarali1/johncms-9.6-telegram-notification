@@ -1,0 +1,126 @@
+<?php
+
+/**
+ * This file is part of JohnCMS Content Management System.
+ *
+ * @copyright JohnCMS Community
+ * @license   https://opensource.org/licenses/GPL-3.0 GPL-3.0
+ * @link      https://johncms.com JohnCMS Project
+ */
+
+/**
+ * @var $sections
+ * @var $online
+ * @var $files_count
+ * @var $unread_count
+ * @var $create_access
+ * @var $pagination
+ * @var \Forum\Models\ForumTopic $topics
+ * @var \Forum\Models\ForumTopic $topic
+ */
+
+$this->layout('system::layout/default');
+?>
+
+<?= $this->fetch(
+    'forum::header',
+    [
+        'unread_count' => $unread_count,
+        'files_count'  => $files_count,
+        'files_url'    => '/forum/?act=files&s=' . $id,
+        'files_name'   => __('Category Files'),
+    ]
+) ?>
+
+<?php if ($total === 0): ?>
+    <?= $this->fetch(
+        'system::app/alert',
+        [
+            'alert_type' => 'alert-info',
+            'alert'      => __('No topics in this section'),
+        ]
+    ) ?>
+<?php endif; ?>
+<?php if ($create_access): ?>
+    <div class="mb-3">
+        <form action="?act=nt&amp;id=<?= $id ?>" method="post">
+            <button type="submit" class="btn btn-primary"><?= __('New Topic') ?></button>
+        </form>
+    </div>
+<?php endif; ?>
+
+<?php foreach ($topics as $topic): ?>
+    <div class="forum-section">
+        <div class="section-header">
+            <div class="d-flex align-items-center w-100">
+                <?php if ($topic['has_icons']): ?>
+                    <div class="topic-icons d-flex align-items-center">
+                        <?php if ($topic->pinned): ?>
+                            <div class="mr-1" title="<?= __('Pinned topic') ?>">
+                                <svg class="icon">
+                                    <use xlink:href="<?= $this->asset('icons/sprite.svg') ?>#pin"/>
+                                </svg>
+                            </div>
+                        <?php endif; ?>
+                        <?php if ($topic->has_poll): ?>
+                            <div class="mr-1" title="<?= __('Topic has poll') ?>">
+                                <svg class="icon">
+                                    <use xlink:href="<?= $this->asset('icons/sprite.svg') ?>#bar-chart"/>
+                                </svg>
+                            </div>
+                        <?php endif; ?>
+                        <?php if ($topic->closed): ?>
+                            <div class="mr-1" title="<?= __('Closed topic') ?>">
+                                <svg class="icon">
+                                    <use xlink:href="<?= $this->asset('icons/sprite.svg') ?>#lock"/>
+                                </svg>
+                            </div>
+                        <?php endif; ?>
+                        <?php if ($topic->deleted): ?>
+                            <div class="mr-1" title="<?= __('Deleted topic') ?>">
+                                <svg class="icon">
+                                    <use xlink:href="<?= $this->asset('icons/sprite.svg') ?>#x"/>
+                                </svg>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+                <a href="<?= $topic->url ?>" class="section-name flex-grow-1 flex-md-grow-0"><?= $topic->name ?></a>
+                <?php if ($topic->deleted): ?>
+                    <div class="ml-3">
+                        <span class="badge badge-danger"><?= __('Deleted topic') ?></span>
+                    </div>
+                <?php else: ?>
+                    <?php if (! empty($topic->last_page_url)): ?>
+                        <a href="<?= $topic->last_page_url ?>" title="<?= __('Last page') ?>">
+                            <span class="badge badge-pill <?= $topic->unread ? 'badge-danger' : 'badge-light border' ?> ml-3"><?= $topic->show_posts_count ?></span>
+                        </a>
+                    <?php else: ?>
+                        <span class="badge badge-pill <?= $topic->unread ? 'badge-danger' : 'badge-light border' ?> ml-3"><?= $topic->show_posts_count ?></span>
+                    <?php endif ?>
+                <?php endif; ?>
+            </div>
+        </div>
+        <div class="small pt-2 text-muted">
+            <?= __('Author') ?>: <?= $topic->user_name ?>,
+            <?= __('Last post') ?>: <?= $topic->show_last_post_date ?>, <?= $topic->show_last_author ?>
+        </div>
+    </div>
+<?php endforeach; ?>
+<div class="pt-2">
+    <div><?= __('Total') ?>: <?= $total ?></div>
+    <!-- Page switching -->
+    <?php if (! empty($pagination)): ?>
+        <div class="mt-2"><?= $pagination ?></div>
+    <?php endif ?>
+</div>
+
+<?= $this->fetch(
+    'forum::footer',
+    [
+        'online'   => $online,
+        'who_url'  => '/forum/?act=who',
+        'who_name' => __('Who in Forum'),
+    ]
+) ?>
+

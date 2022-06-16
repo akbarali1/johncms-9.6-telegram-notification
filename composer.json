@@ -1,0 +1,95 @@
+{
+    "name": "johncms/johncms",
+    "description": "Content Management System",
+    "homepage": "https://johncms.com",
+    "license": "GPL-3.0-only",
+    "keywords": [
+        "johncms",
+        "cms",
+        "php",
+        "mysql",
+        "mobile"
+    ],
+    "authors": [
+        {
+            "name": "JohnCMS Contributors",
+            "homepage": "https://github.com/johncms/johncms/graphs/contributors"
+        }
+    ],
+    "support": {
+        "forum": "https://johncms.com/forum",
+        "source": "https://github.com/johncms/johncms",
+        "issues": "https://johncms.com/forum/index.php?id=67"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true,
+        "vendor-dir": "system/vendor"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": "^7.3 || ^8.0",
+        "ext-dom": "*",
+        "ext-gd": "*",
+        "ext-json": "*",
+        "ext-libxml": "*",
+        "ext-mbstring": "*",
+        "ext-pdo": "*",
+        "ext-simplexml": "*",
+        "ext-zip": "*",
+        "aura/autoload": "^2.0",
+        "ezyang/htmlpurifier": "^4.13",
+        "gettext/translator": "^1.0",
+        "guzzlehttp/psr7": "^1.8",
+        "illuminate/cache": "^8.37",
+        "illuminate/database": "^8.37",
+        "illuminate/filesystem": "^8.37",
+        "imangazaliev/didom": "^1.16",
+        "intervention/image": "^2.5",
+        "james-heinrich/getid3": "^1.9",
+        "laminas/laminas-config-aggregator": "^1.5",
+        "laminas/laminas-mail": "^2.14",
+        "laminas/laminas-servicemanager": "^3.6",
+        "laminas/laminas-uri": "^2.8",
+        "laminas/laminas-validator": "^2.14",
+        "league/flysystem": "^2.0",
+        "mobicms/captcha": "^2.0",
+        "mobicms/render": "^2.0",
+        "nikic/fast-route": "^1.3",
+        "simba77/ckeditor-media-embed": "^1.1",
+        "simba77/johncms-pagination": "^1.1"
+    },
+    "require-dev": {
+        "gettext/gettext": "^5.5",
+        "gettext/php-scanner": "^1.3",
+        "roave/security-advisories": "dev-master",
+        "squizlabs/php_codesniffer": "^3.6",
+        "vimeo/psalm": "^4.7"
+    },
+    "autoload": {
+        "files": [
+            "config/constants.php",
+            "system/helpers.php"
+        ],
+        "psr-4": {
+            "Johncms\\": "system/src/",
+            "Johncms\\System\\Legacy\\": "system/src-legacy/"
+        }
+    },
+    "bin": [
+        "system/bin/scan",
+        "system/bin/translate"
+    ],
+    "scripts": {
+        "check": [
+            "@cs-check"
+        ],
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "psalm": "psalm",
+        "psalm-fix": "psalm --alter --issues=MissingReturnType,MissingParamType",
+        "translate": "translate",
+        "translate-scan": "scan"
+    }
+}
