@@ -34,7 +34,7 @@ class TelegramService
     public function __construct()
     {
         $config = di('config')['johncms'];
-        $this->bot_token = $config['bot_token'] ?? '';
+        $this->bot_token = $config['bot_token'] ?? null;
         $this->group_id = $config['group_id'] ?? '';
 //        echo '<pre>';
 //        print_r($this->bot_token);
@@ -44,17 +44,18 @@ class TelegramService
 
     public function sendTelegram($array, $sending = 'sendMessage')
     {
-        $client = new Client(['base_uri' => 'https://api.telegram.org/bot' . $this->bot_token . '/']);
-
-        try {
-            $client->post(
-                $sending,
-                [
-                    'query' => $array,
-                ]
-            );
-        } catch (\Exception $e) {
-            die($e->getMessage());
+        if (isset($this->bot_token) && $this->bot_token !== '' && ! empty($this->bot_token)) {
+            $client = new Client(['base_uri' => 'https://api.telegram.org/bot' . $this->bot_token . '/']);
+            try {
+                $client->post(
+                    $sending,
+                    [
+                        'query' => $array,
+                    ]
+                );
+            } catch (\Exception $e) {
+                die($e->getMessage());
+            }
         }
     }
 
