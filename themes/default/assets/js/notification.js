@@ -1,7 +1,7 @@
 "use strict";
 
 (setInterval(async function () {
-    let getNotification = await fetch('http://john/notification.php');
+    let getNotification = await fetch('/notifications/ajax/');
     if (getNotification.ok) {
         let responce = await getNotification.json();
         if (responce.count) {

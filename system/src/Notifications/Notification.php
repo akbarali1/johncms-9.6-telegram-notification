@@ -49,6 +49,7 @@ class Notification extends Model
 
     protected $fillable = [
         'module',
+        'notificated',
         'event_type',
         'user_id',
         'sender_id',
