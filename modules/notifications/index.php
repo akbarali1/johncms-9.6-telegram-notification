@@ -51,6 +51,7 @@ $pages = [
     'index'    => 'index.php',
     'settings' => 'settings.php',
     'clear'    => 'clear.php',
+    'ajax'     => 'ajax.php',
 ];
 
 // Определяем наличие страницы и показываем если она есть
