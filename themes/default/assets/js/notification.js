@@ -23,8 +23,8 @@
             let menuNotification = document.querySelector('a[href="/notifications/"] > .badge');
             // Если до этого были уведомления, то прибавляем к ним на 1
             if (notification && menuNotification) {
-                notification.textContent     = parseInt(notification.textContent) + 1;
-                menuNotification.textContent = parseInt(menuNotification.textContent) + 1;
+                notification.textContent     = responce.count;
+                menuNotification.textContent = responce.count;
             } else {
                 // Если уведомлений не было, добавляем в DOM элемент
                 addToDOM('.sidebar_user_avatar > .position-relative');
