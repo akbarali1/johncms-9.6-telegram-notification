@@ -32,16 +32,8 @@
             }
 
             // Запускаем уведомление
-            let audio = document.body.appendChild(document.createElement('audio'));
-            audio.src = '/sound.mp3';
-            let resp  = audio.play();
-            if (resp !== undefined) {
-                resp.then(_ => {
-                    // Промис, если все прошло отлично
-                }).catch(error => {
-                    // Если возникла ошибка, ничего не выводим, чтобы не флудил в консоль
-                });
-            }
+            let audio = document.getElementById('notification_audio');
+            audio.play();
         }
     }
 }, 5000));

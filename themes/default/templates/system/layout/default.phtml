@@ -190,6 +190,7 @@ $ads_array = $ads->getAds();
     ?>
 <?php endif; ?>
 <?= $this->section('scripts', '') ?>
+<audio src="<?= $this->asset('sound.mp3') ?>" id="notification_audio"></audio>
 <script src="<?= $this->asset('js/notification.js', true) ?>" defer></script>
 </body>
 </html>
